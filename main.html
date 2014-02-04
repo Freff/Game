@@ -21,6 +21,22 @@
 
 			function onTimerTick ( )
 			{
+				Update ( );
+				Render ( );
+			}
+
+			function Update ( )
+			{
+				x = x + 1;
+
+				if ( x > c.width )
+				{
+					x = -50;
+				}
+			}
+
+			function Render ( )
+			{
 				ctx.save ( );
 
 				ctx.setTransform ( 1, 0, 0, 1, 0, 0 );
@@ -28,12 +44,7 @@
 
 				ctx.restore ( );
 
-				x = x + 1;
-
-				if ( x > c.width )
-				{
-					x = -50;
-				}
+				
 
 				ctx.fillStyle = "#FF0000";
 				ctx.fillRect ( x, y, width, height );
