@@ -5,17 +5,47 @@
 	<body>
 
 		<canvas id="myCanvas" width="300" height="100" style="border:1px solid #000000;">
-			You need to get a better brower, buddy.
+			You need to get a better browser buddy.
 		</canvas>
 
 		<script type="text/javascript">
-			var x = 0;
-			var y = 0;
 			var width = 50;
 			var height = 50;
+			
+			var pos = new Vector2 ( 20, 20 );
+			
 
 			var c = document.getElementById("myCanvas");
 			var ctx = c.getContext("2d");
+
+     function Vector2 ( x, y )
+     {
+       this.X = x;
+       this.Y = y;
+     }
+     
+     function Square ( pos, size, colour )
+     {
+       this.Velocity = new Vector2 (10, 0);
+     
+       this.Position = pos;
+       this.Size = size;
+       this.Colour = colour;
+     }
+     Square.prototype.Update = function ( )
+     {
+        this.Position.X += this.Velocity.X;
+        this.Position.Y += this.Velocity.Y;
+        
+        if ( this.Position.X > c.width )
+				{
+					this.Position.X = -50;
+				}
+     }
+     
+     var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
+
+     var testSquare2 = new Square ( new Vector2 ( 200, 20 ), new Vector2 ( 20, 20 ), "#00FF00" );
 
 			setInterval ( onTimerTick, 33 );
 
@@ -27,12 +57,10 @@
 
 			function Update ( )
 			{
-				x = x + 10;
+				testSquare.Update ( );
+				testSquare2.Update ( );
 
-				if ( x > c.width )
-				{
-					x = -50;
-				}
+				
 			}
 
 			function Render ( )
@@ -45,10 +73,18 @@
 				ctx.restore ( );
 
 				
+      RenderSquare ( testSquare );
+      RenderSquare ( testSquare2 );
+				     
 
-				ctx.fillStyle = "#FF0000";
-				ctx.fillRect ( x, y, width, height );
-
+			}
+			
+			function RenderSquare ( square )
+			{
+			  ctx.fillStyle = square.Colour;
+			  ctx.fillRect ( square.Position.X, square.Position.Y,
+				                square.Size.X, square.Size.Y );
+				           
 			}
 
 		</script>
