@@ -17,35 +17,78 @@
 
 			var c = document.getElementById("myCanvas");
 			var ctx = c.getContext("2d");
+			var rect = c.getBoundingClientRect();
 
-     function Vector2 ( x, y )
-     {
-       this.X = x;
-       this.Y = y;
-     }
-     
-     function Square ( pos, size, colour )
-     {
-       this.Velocity = new Vector2 (10, 0);
-     
-       this.Position = pos;
-       this.Size = size;
-       this.Colour = colour;
-     }
-     Square.prototype.Update = function ( )
-     {
-        this.Position.X += this.Velocity.X;
-        this.Position.Y += this.Velocity.Y;
-        
-        if ( this.Position.X > c.width )
-				{
-					this.Position.X = -50;
-				}
-     }
-     
-     var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
+			var lastDownTarget;
+			window.onload = function() 
+			{
 
-     var testSquare2 = new Square ( new Vector2 ( 200, 20 ), new Vector2 ( 20, 20 ), "#00FF00" );
+			    document.addEventListener('mousedown', function(event) 
+			    {
+			        lastDownTarget = event.target;
+
+			        var x = event.pageX - rect.left;
+			        var y = event.pageY - rect.top;
+
+			        testSquare2.Position = new Vector2 ( x, y );
+
+			    }, false);
+
+			    document.addEventListener('keydown', KeyHandler, false);
+			}
+
+			function KeyHandler ( event )
+			{
+				if(lastDownTarget == c) 
+		        {
+		        	if ( event.which == 37 )
+		        	{
+		        		testSquare.Position.X -= 1;
+		        	}
+		        	else if ( event.which == 39 )
+		        	{
+		        		testSquare.Position.X += 1;
+		        	}
+		        	if ( event.which == 38 )
+		        	{
+		        		testSquare.Position.Y -= 1;
+		        	}
+		        	else if ( event.which == 40 )
+		        	{
+		        		testSquare.Position.Y += 1;
+		        	}
+		        }
+			}
+
+    		function Vector2 ( x, y )
+     		{
+       			this.X = x;
+       			this.Y = y;
+     		}
+     
+     		function Square ( pos, size, colour )
+     		{
+       			this.Velocity = new Vector2 (0, 0);
+     
+       			this.Position = pos;
+       			this.Size = size;
+       			this.Colour = colour;
+
+       			this.Update = function ( )
+		     	{
+			       	this.Position.X += this.Velocity.X;
+		        	this.Position.Y += this.Velocity.Y;
+		        
+		        	if ( this.Position.X > c.width )
+					{
+						this.Position.X = -50;
+					}
+	    		}
+ 			}
+	     
+	    	var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
+
+	     	var testSquare2 = new Square ( new Vector2 ( 200, 20 ), new Vector2 ( 20, 20 ), "#00FF00" );
 
 			setInterval ( onTimerTick, 33 );
 
@@ -73,8 +116,8 @@
 				ctx.restore ( );
 
 				
-      RenderSquare ( testSquare );
-      RenderSquare ( testSquare2 );
+      			RenderSquare ( testSquare );
+      			RenderSquare ( testSquare2 );
 				     
 
 			}
@@ -86,6 +129,8 @@
 				                square.Size.X, square.Size.Y );
 				           
 			}
+
+
 
 		</script>
 
