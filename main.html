@@ -1,5 +1,9 @@
 <html>
 	<head>
+		<script src="Scripts/Square.js" type="text/javascript"></script> 
+		<script src="Scripts/Vector2.js" type="text/javascript"></script> 
+		<script data-main="Scripts/main" src="scripts/require.js"></script>
+    
 	</head>
 
 	<body>
@@ -7,6 +11,8 @@
 		<canvas id="myCanvas" width="300" height="300" style="border:1px solid #000000;">
 			You need to get a better browser buddy.
 		</canvas>
+
+	
 
 		<script type="text/javascript">
 			var width = 50;
@@ -20,82 +26,86 @@
 			var rect = c.getBoundingClientRect();
 
 			var lastDownTarget;
+
+			var left = false;
+			var right = false;
+			var up = false;
+			var down = false;
+
+			var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
+
+			setInterval ( GameLoop, 33 );
+
+			var squares = new Array ( );
+
+
+
 			window.onload = function() 
 			{
-
-			    document.addEventListener('mousedown', function(event) 
-			    {
-			        lastDownTarget = event.target;
-
-			        var x = event.pageX - rect.left;
-			        var y = event.pageY - rect.top;
-
-			        testSquare2.Position = new Vector2 ( x, y );
-
-			    }, false);
-
-			    document.addEventListener('keydown', KeyHandler, false);
+			    document.addEventListener('mousedown', MouseDownHandler, false);
+			    document.addEventListener('keydown', KeyDownHandler, false);
+			    document.addEventListener('keyup', KeyUpHandler, false);
 			}
 
-			function KeyHandler ( event )
+			function KeyDownHandler ( event )
 			{
 				if(lastDownTarget == c) 
 		        {
 		        	if ( event.which == 37 )
 		        	{
-		        		testSquare.Position.X -= 1;
+		        		left = true;
 		        	}
 		        	else if ( event.which == 39 )
 		        	{
-		        		testSquare.Position.X += 1;
+		        		right = true;
 		        	}
 		        	if ( event.which == 38 )
 		        	{
-		        		testSquare.Position.Y -= 1;
+		        		up = true;
 		        	}
 		        	else if ( event.which == 40 )
 		        	{
-		        		testSquare.Position.Y += 1;
+		        		down = true;
 		        	}
 		        }
 			}
+			function KeyUpHandler ( event ) 
+			{
+				if(lastDownTarget == c) 
+		        {
+		        	if ( event.which == 37 )
+		        	{
+		        		left = false;
+		        	}
+		        	else if ( event.which == 39 )
+		        	{
+		        		right = false
+		        	}
+		        	if ( event.which == 38 )
+		        	{
+		        		up = false;
+		        	}
+		        	else if ( event.which == 40 )
+		        	{
+		        		down = false;
+		        	}
+		        }
+			}
+			function MouseDownHandler ( event ) 
+			{
+				lastDownTarget = event.target;
 
-    		function Vector2 ( x, y )
-     		{
-       			this.X = x;
-       			this.Y = y;
-     		}
-     
-     		function Square ( pos, size, colour )
-     		{
-       			this.Velocity = new Vector2 (0, 0);
-     
-       			this.Position = pos;
-       			this.Size = size;
-       			this.Colour = colour;
-       			
-       			this.Ammo = new Array ( );
+			        var x = event.pageX - rect.left;
+			        var y = event.pageY - rect.top;
 
-       			this.Update = function ( )
-		     	{
-			       	this.Position.X += this.Velocity.X;
-		        	this.Position.Y += this.Velocity.Y;
-		        
-		        	if ( this.Position.X > c.width )
-					{
-						this.Position.X = -50;
-					}
-					
-					}
- 			}
+			        var x = Math.atan(450/120);
+
+			        squares[squares.length] = new Square ( new Vector2 ( testSquare.Position.X, testSquare.Position.Y ), 
+			        										new Vector2 ( 5, 5 ), "#000000" );
+			        squares[squares.length-1].Velocity = new Vector2 ( 2, 0 );
+			}
 	     
-	    	var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
-
-	     	var testSquare2 = new Square ( new Vector2 ( 200, 20 ), new Vector2 ( 20, 20 ), "#00FF00" );
-
-			setInterval ( onTimerTick, 33 );
-
-			function onTimerTick ( )
+			function GameLoop ( )
 			{
 				Update ( );
 				Render ( );
@@ -103,9 +113,29 @@
 
 			function Update ( )
 			{
-				testSquare.Update ( );
-				testSquare2.Update ( );
+				if ( left ) 
+				{
+					testSquare.Position.X -= 2;
+				}
+				else if ( right ) 
+				{
+					testSquare.Position.X += 2;
+				}
+				if ( up ) 
+				{
+					testSquare.Position.Y -= 2;
+				}
+				else if ( down ) 
+				{
+					testSquare.Position.Y += 2;
+				}
 
+				testSquare.Update ( );
+				
+				for ( var i = 0; i < squares.length; i++ )
+      			{
+      				squares[i].Update ( );
+      			}
 				
 			}
 
@@ -120,8 +150,11 @@
 
 				
       			RenderSquare ( testSquare );
-      			RenderSquare ( testSquare2 );
 				     
+      			for ( var i = 0; i < squares.length; i++ )
+      			{
+      				RenderSquare ( squares[i]);
+      			}
 
 			}
 			
