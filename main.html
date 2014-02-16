@@ -4,7 +4,7 @@
 
 	<body>
 
-		<canvas id="myCanvas" width="300" height="100" style="border:1px solid #000000;">
+		<canvas id="myCanvas" width="300" height="300" style="border:1px solid #000000;">
 			You need to get a better browser buddy.
 		</canvas>
 
@@ -73,6 +73,8 @@
        			this.Position = pos;
        			this.Size = size;
        			this.Colour = colour;
+       			
+       			this.Ammo = new Array ( );
 
        			this.Update = function ( )
 		     	{
@@ -83,7 +85,8 @@
 					{
 						this.Position.X = -50;
 					}
-	    		}
+					
+					}
  			}
 	     
 	    	var testSquare = new Square ( new Vector2 ( 20, 20 ), new Vector2 ( 20, 20 ), "#FF0000" );
